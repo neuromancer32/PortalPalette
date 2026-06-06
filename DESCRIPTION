@@ -1,0 +1,15 @@
+Package: PortalPalette
+Type: Package
+Title: Simple palette inspired by the portal game
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Nicholas", "Schaffer",
+      email = "jane@example.com",
+      role = c("aut", "cre")
+    )
+  )
+Description: simple palette inspired by the portal videogame. Should be ggplot compatible.
+License: CC-BY-4.0
+Encoding: UTF-8
+LazyData: true

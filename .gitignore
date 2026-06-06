@@ -1,0 +1,6 @@
+.Rbuildignore
+PortalPalette.Rproj
+.RData
+.Rhistory
+/.Rproj.user
+/.idea
