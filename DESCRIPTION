@@ -1,15 +1,29 @@
 Package: PortalPalette
 Type: Package
-Title: Simple palette inspired by the portal game
-Version: 0.1.0
-Authors@R: c(
-    person(
-      "Nicholas", "Schaffer",
-      email = "jane@example.com",
-      role = c("aut", "cre")
-    )
-  )
-Description: simple palette inspired by the portal videogame. Should be ggplot compatible.
-License: CC-BY-4.0
+Title: Color Palettes Inspired by the Portal Video Game
+Version: 0.2.0
+Authors@R: 
+    person("Neuromancer32",
+           email = "neuromancer32@users.noreply.github.com",
+           role = c("aut", "cre"))
+Description: Orange-and-blue color palettes inspired by the Portal video game:
+    a lightness-balanced diverging palette, the original 'classic' palette,
+    and sequential orange and blue palettes. Includes discrete and continuous
+    color and fill scales for 'ggplot2' (with an optional midpoint for
+    diverging data) and a matching minimal theme.
+License: CC BY 4.0
+URL: https://github.com/neuromancer32/PortalPalette
+BugReports: https://github.com/neuromancer32/PortalPalette/issues
 Encoding: UTF-8
-LazyData: true
+Depends:
+    R (>= 3.5.0)
+Imports:
+    ggplot2 (>= 3.4.0),
+    grDevices,
+    scales,
+    utils
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1

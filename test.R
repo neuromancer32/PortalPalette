@@ -1,34 +1,88 @@
-# 1. Load your package dynamically
-devtools::load_all()
+# Regenerates the README figures in man/fig/.
+# Run from the package root: source("test.R")
 
-# 2. Load dependencies
+devtools::load_all()
 library(ggplot2)
 
-# 3. Use your package functions immediately
-ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
-  geom_point(size = 3, alpha = 0.8) +
-  scale_color_portal(palette = "portal") +
-  theme_minimal() +
-  labs(
-    title = "Sepal Length",
+save_fig <- function(plot, file, width = 920, height = 618) {
+  ggsave(file.path("man", "fig", file), plot,
+         width = width / 96, height = height / 96, dpi = 96)
+}
+
+# 1. All palettes, in color and in greyscale ------------------------------
+to_grey <- function(hex) {
+  rgb <- grDevices::col2rgb(hex) / 255
+  lin <- ifelse(rgb <= 0.04045, rgb / 12.92, ((rgb + 0.055) / 1.055)^2.4)
+  y <- colSums(lin * c(0.2126, 0.7152, 0.0722))
+  g <- ifelse(y <= 0.0031308, 12.92 * y, 1.055 * y^(1 / 2.4) - 0.055)
+  grDevices::rgb(g, g, g)
+}
+
+swatches <- do.call(rbind, lapply(names(portal_palettes_list()), function(p) {
+  cols <- portal_colors(p)
+  rbind(
+    data.frame(palette = p, version = "color", i = seq_along(cols),
+               n = length(cols), hex = unname(cols)),
+    data.frame(palette = p, version = "greyscale", i = seq_along(cols),
+               n = length(cols), hex = to_grey(unname(cols)))
   )
+}))
+swatches$palette <- factor(swatches$palette,
+                           levels = names(portal_palettes_list()))
+swatches$xmin <- (swatches$i - 1) / swatches$n
+swatches$xmax <- swatches$i / swatches$n
 
-ggplot(faithfuld, aes(x = eruptions, y = waiting, fill = density)) +
-  geom_raster() +
-  scale_fill_portal(palette = "portal", discrete = FALSE, reverse = TRUE) +
-  theme_minimal() +
-  labs(
-    title = "Eruptions",
-  )
-
-# Create a dummy dataset of 6 items
-palette_data <- data.frame(
-  x = factor(1:6),
-  y = 1
-)
-
-ggplot(palette_data, aes(x = x, y = y, fill = x)) +
-  geom_col(show.legend = FALSE) +
-  scale_fill_portal(palette = "portal") +
+p_palettes <- ggplot(swatches) +
+  geom_rect(aes(xmin = xmin, xmax = xmax, ymin = 0, ymax = 1, fill = hex),
+            colour = "white", linewidth = 1) +
+  geom_text(data = subset(swatches, version == "color"),
+            aes(x = (xmin + xmax) / 2, y = 0.5, label = hex),
+            size = 3.2, colour = ifelse(
+              subset(swatches, version == "color")$hex %in%
+                c("#fce0b6", "#abe1ff"), "grey20", "white")) +
+  scale_fill_identity() +
+  facet_grid(palette ~ version, switch = "y") +
   theme_void() +
-  labs(title = "Portal Palette")
+  theme(strip.text.y.left = element_text(angle = 0, hjust = 1,
+                                         face = "bold", size = 12),
+        strip.text.x = element_text(face = "bold", size = 12,
+                                    margin = margin(b = 6)),
+        plot.title = element_text(face = "bold", size = 16,
+                                  margin = margin(b = 10)),
+        plot.margin = margin(15, 15, 15, 15),
+        plot.background = element_rect(fill = "white", colour = NA)) +
+  labs(title = "PortalPalette palettes")
+save_fig(p_palettes, "Palette.png")
+
+# 2. Discrete scale --------------------------------------------------------
+p_sepal <- ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
+  geom_point(size = 3, alpha = 0.9) +
+  scale_color_portal() +
+  theme_portal(base_size = 13) +
+  labs(title = "Sepal dimensions", subtitle = "scale_color_portal()",
+       x = "Sepal length (cm)", y = "Sepal width (cm)")
+save_fig(p_sepal, "Sepal.png")
+
+# 3. Sequential continuous scale -------------------------------------------
+p_eruptions <- ggplot(faithfuld, aes(eruptions, waiting, fill = density)) +
+  geom_raster() +
+  scale_fill_portal("blue", discrete = FALSE) +
+  coord_cartesian(expand = FALSE) +
+  theme_portal(base_size = 13) +
+  labs(title = "Old Faithful eruptions",
+       subtitle = 'scale_fill_portal("blue", discrete = FALSE)',
+       x = "Eruption length (min)", y = "Waiting time (min)")
+save_fig(p_eruptions, "Eruptions.png")
+
+# 4. Diverging continuous scale with a midpoint ----------------------------
+grid <- expand.grid(x = seq(-3, 3, length.out = 120),
+                    y = seq(-3, 3, length.out = 120))
+grid$z <- sin(grid$x) * cos(grid$y) + 0.3
+p_diverging <- ggplot(grid, aes(x, y, fill = z)) +
+  geom_raster() +
+  scale_fill_portal(discrete = FALSE, midpoint = 0, name = "value") +
+  coord_fixed(expand = FALSE) +
+  theme_portal(base_size = 13) +
+  labs(title = "Diverging data centered on zero",
+       subtitle = "scale_fill_portal(discrete = FALSE, midpoint = 0)")
+save_fig(p_diverging, "Diverging.png")
