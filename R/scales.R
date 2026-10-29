@@ -51,6 +51,9 @@ portal_scale <- function(aesthetics, palette, discrete, reverse, midpoint,
 #'   `midpoint` (usually `0`) so the light center color sits on that value.
 #' * Use `"orange"` or `"blue"` for **sequential** data that only goes one
 #'   way, such as density, counts or expression level.
+#' * Use `"test_chamber"`, `"overgrown"` or `"ratman"` for **categorical**
+#'   data with no order, such as cell types, conditions or clusters (up to 6
+#'   groups).
 #' * Use `"classic"` to reproduce figures made with the original, brighter
 #'   oranges.
 #'
@@ -74,10 +77,15 @@ portal_scale <- function(aesthetics, palette, discrete, reverse, midpoint,
 #' @examples
 #' library(ggplot2)
 #'
-#' # Discrete color scale
+#' # Categorical color scale for unordered groups
 #' ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
 #'   geom_point() +
-#'   scale_color_portal()
+#'   scale_color_portal("test_chamber")
+#'
+#' # Categorical fill scale
+#' ggplot(mtcars, aes(factor(cyl), fill = factor(gear))) +
+#'   geom_bar() +
+#'   scale_fill_portal("overgrown")
 #'
 #' # Sequential fill for one-directional data
 #' ggplot(faithfuld, aes(eruptions, waiting, fill = density)) +

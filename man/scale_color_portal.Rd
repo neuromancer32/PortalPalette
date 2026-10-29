@@ -37,9 +37,14 @@ scale_fill_portal(
 )
 }
 \arguments{
-\item{palette}{Character name of the palette: \code{"portal"} (diverging,
-lightness-balanced; the default), \code{"classic"} (diverging, original bright
-oranges), \code{"orange"} or \code{"blue"} (sequential, light to dark).}
+\item{palette}{Character name of the palette:
+\itemize{
+\item Diverging: \code{"portal"} (lightness-balanced; the default) or \code{"classic"}
+(original bright oranges).
+\item Sequential, light to dark: \code{"orange"} or \code{"blue"}.
+\item Categorical, for unordered groups: \code{"test_chamber"}, \code{"overgrown"} or
+\code{"ratman"}.
+}}
 
 \item{discrete}{Logical. If \code{TRUE} (default), returns a discrete scale for
 categorical data. If \code{FALSE}, returns a continuous gradient for numeric
@@ -77,6 +82,9 @@ center, such as log fold change, z-scores or correlations, and set
 \code{midpoint} (usually \code{0}) so the light center color sits on that value.
 \item Use \code{"orange"} or \code{"blue"} for \strong{sequential} data that only goes one
 way, such as density, counts or expression level.
+\item Use \code{"test_chamber"}, \code{"overgrown"} or \code{"ratman"} for \strong{categorical}
+data with no order, such as cell types, conditions or clusters (up to 6
+groups).
 \item Use \code{"classic"} to reproduce figures made with the original, brighter
 oranges.
 }
@@ -85,10 +93,15 @@ oranges.
 \examples{
 library(ggplot2)
 
-# Discrete color scale
+# Categorical color scale for unordered groups
 ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
   geom_point() +
-  scale_color_portal()
+  scale_color_portal("test_chamber")
+
+# Categorical fill scale
+ggplot(mtcars, aes(factor(cyl), fill = factor(gear))) +
+  geom_bar() +
+  scale_fill_portal("overgrown")
 
 # Sequential fill for one-directional data
 ggplot(faithfuld, aes(eruptions, waiting, fill = density)) +

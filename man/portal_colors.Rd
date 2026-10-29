@@ -7,9 +7,14 @@
 portal_colors(palette = "portal")
 }
 \arguments{
-\item{palette}{Character name of the palette: \code{"portal"} (diverging,
-lightness-balanced; the default), \code{"classic"} (diverging, original bright
-oranges), \code{"orange"} or \code{"blue"} (sequential, light to dark).}
+\item{palette}{Character name of the palette:
+\itemize{
+\item Diverging: \code{"portal"} (lightness-balanced; the default) or \code{"classic"}
+(original bright oranges).
+\item Sequential, light to dark: \code{"orange"} or \code{"blue"}.
+\item Categorical, for unordered groups: \code{"test_chamber"}, \code{"overgrown"} or
+\code{"ratman"}.
+}}
 }
 \value{
 A named character vector of hex colors.

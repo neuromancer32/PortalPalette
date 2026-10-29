@@ -4,9 +4,9 @@
 \name{PortalPalette-package}
 \alias{PortalPalette}
 \alias{PortalPalette-package}
-\title{PortalPalette: Color Palettes Inspired by the Portal Video Game}
+\title{PortalPalette: Color Palettes Inspired by the Portal Video Games}
 \description{
-Orange-and-blue color palettes inspired by the Portal video game: a lightness-balanced diverging palette, the original 'classic' palette, and sequential orange and blue palettes. Includes discrete and continuous color and fill scales for 'ggplot2' (with an optional midpoint for diverging data) and a matching minimal theme.
+Color palettes inspired by the Portal video games: a lightness-balanced orange-to-blue diverging palette, the original 'classic' palette, sequential orange and blue palettes, and color-blind-checked categorical palettes based on the test chamber, overgrown and Rattmann den areas. Includes discrete and continuous color and fill scales for 'ggplot2' (with an optional midpoint for diverging data) and a matching minimal theme.
 }
 \seealso{
 Useful links:
@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Nicholas Schaffer \email{nicholasschaffer52@gmail.com}
+\strong{Maintainer}: Neuromancer32 \email{neuromancer32@users.noreply.github.com}
 
 }
 \keyword{internal}

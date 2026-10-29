@@ -39,7 +39,8 @@ p_palettes <- ggplot(swatches) +
             aes(x = (xmin + xmax) / 2, y = 0.5, label = hex),
             size = 3.2, colour = ifelse(
               subset(swatches, version == "color")$hex %in%
-                c("#fce0b6", "#abe1ff"), "grey20", "white")) +
+                c("#fce0b6", "#abe1ff", "#c6e8f6", "#bcc699", "#e0a475"),
+              "grey20", "white")) +
   scale_fill_identity() +
   facet_grid(palette ~ version, switch = "y") +
   theme_void() +
@@ -52,14 +53,15 @@ p_palettes <- ggplot(swatches) +
         plot.margin = margin(15, 15, 15, 15),
         plot.background = element_rect(fill = "white", colour = NA)) +
   labs(title = "PortalPalette palettes")
-save_fig(p_palettes, "Palette.png")
+save_fig(p_palettes, "Palette.png", height = 1000)
 
 # 2. Discrete scale --------------------------------------------------------
 p_sepal <- ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
   geom_point(size = 3, alpha = 0.9) +
-  scale_color_portal() +
+  scale_color_portal("test_chamber") +
   theme_portal(base_size = 13) +
-  labs(title = "Sepal dimensions", subtitle = "scale_color_portal()",
+  labs(title = "Sepal dimensions",
+       subtitle = 'scale_color_portal("test_chamber")',
        x = "Sepal length (cm)", y = "Sepal width (cm)")
 save_fig(p_sepal, "Sepal.png")
 
@@ -86,3 +88,27 @@ p_diverging <- ggplot(grid, aes(x, y, fill = z)) +
   labs(title = "Diverging data centered on zero",
        subtitle = "scale_fill_portal(discrete = FALSE, midpoint = 0)")
 save_fig(p_diverging, "Diverging.png")
+
+# 5. Categorical palettes side by side ----------------------------------------
+groups <- data.frame(
+  group = factor(paste("Group", LETTERS[1:6]), levels = paste("Group", LETTERS[1:6])),
+  value = c(42, 35, 28, 31, 22, 17)
+)
+cat_plot <- function(p) {
+  ggplot(groups, aes(group, value, fill = group)) +
+    geom_col(width = 0.75, show.legend = FALSE) +
+    scale_fill_portal(p) +
+    theme_portal(base_size = 12) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          panel.grid.major.x = element_blank()) +
+    labs(title = p, subtitle = sprintf('scale_fill_portal("%s")', p),
+         x = NULL, y = NULL)
+}
+png(file.path("man", "fig", "Categorical.png"), width = 1380, height = 520, res = 110)
+grid::grid.newpage()
+grid::pushViewport(grid::viewport(layout = grid::grid.layout(1, 3)))
+for (i in 1:3) {
+  print(cat_plot(c("test_chamber", "overgrown", "ratman")[i]),
+        vp = grid::viewport(layout.pos.row = 1, layout.pos.col = i))
+}
+invisible(dev.off())

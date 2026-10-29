@@ -43,3 +43,25 @@ test_that("portal palette ends are matched in lightness", {
   expect_lt(abs(l[[2]] - l[[5]]), 2)
   expect_lt(abs(l[[3]] - l[[4]]), 5)
 })
+
+test_that("categorical palettes return their first n colors", {
+  for (p in c("test_chamber", "overgrown", "ratman")) {
+    cols <- unname(portal_colors(p))
+    expect_equal(portal_palette(p)(3), cols[1:3])
+    expect_equal(portal_palette(p)(6), cols)
+  }
+})
+
+test_that("categorical palettes refuse interpolation", {
+  expect_error(portal_palette("ratman", discrete = FALSE), "categorical")
+  expect_error(portal_palette("ratman")(7), "6 colors")
+  expect_error(scale_fill_portal("overgrown", discrete = FALSE), "categorical")
+})
+
+test_that("categorical palette colors are distinct (CIE Lab distance)", {
+  for (p in c("test_chamber", "overgrown", "ratman")) {
+    lab <- grDevices::convertColor(t(grDevices::col2rgb(portal_colors(p))) / 255,
+                                   from = "sRGB", to = "Lab")
+    expect_gt(min(stats::dist(lab)), 12)
+  }
+})

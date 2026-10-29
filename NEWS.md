@@ -1,3 +1,15 @@
+# PortalPalette 0.3.0
+
+## New features
+
+* New categorical palettes `"test_chamber"`, `"overgrown"` and `"ratman"` for
+  unordered groups (up to 6 each). Colors were sampled from reference
+  screenshots and adjusted so every pair stays distinguishable under
+  deuteranopia, protanopia and tritanopia. The first colors are the most
+  distinct.
+* Categorical palettes refuse continuous use or more groups than they have
+  colors, with an informative error.
+
 # PortalPalette 0.2.0
 
 ## Breaking changes

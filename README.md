@@ -1,12 +1,14 @@
-# PortalPalette
+# PortalPalette <img src="man/figures/logo.png" align="right" height="139" alt="PortalPalette hex logo" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/neuromancer32/PortalPalette/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/neuromancer32/PortalPalette/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-Orange-and-blue color palettes for R and ggplot2, inspired by the game Portal.
+Color palettes for R and ggplot2, inspired by the Portal games.
 
-The default `portal` palette is a diverging orange → tan → blue palette, tuned so that each orange is as light as its matching blue. That keeps gradients visually balanced around their midpoint, which makes it a good fit for heatmaps of signed data such as log fold change, z-scores or correlations. Sequential `orange` and `blue` palettes cover data that only goes one way.
+- **Diverging:** the default `portal` palette runs orange → tan → blue, tuned so that each orange is as light as its matching blue. That keeps gradients visually balanced around their midpoint, which suits heatmaps of signed data such as log fold change, z-scores or correlations.
+- **Sequential:** `orange` and `blue` cover data that only goes one way.
+- **Categorical:** `test_chamber`, `overgrown` and `ratman` cover unordered groups such as cell types, conditions or clusters. Their colors were sampled from screenshots of each area, then adjusted so every pair stays distinguishable with common forms of color blindness.
 
 ![PortalPalette palettes](man/fig/Palette.png)
 
@@ -19,9 +21,9 @@ remotes::install_github("neuromancer32/PortalPalette")
 
 ## Usage
 
-### Discrete scales
+### Categorical data
 
-For up to as many groups as the palette has colors, discrete scales use exact palette colors rather than blends.
+Use a categorical palette when groups have no order. Each holds up to 6 groups, and the first colors are the most distinct, so plots with 2–3 groups get the strongest contrast.
 
 ```r
 library(ggplot2)
@@ -29,11 +31,15 @@ library(PortalPalette)
 
 ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
   geom_point(size = 3) +
-  scale_color_portal() +
+  scale_color_portal("test_chamber") +
   theme_portal()
 ```
 
-![Discrete scale](man/fig/Sepal.png)
+![Categorical scale](man/fig/Sepal.png)
+
+![Categorical palettes](man/fig/Categorical.png)
+
+Diverging and sequential palettes also work as discrete scales for *ordered* groups, such as dose levels or time points. With up to as many groups as the palette has colors, they use exact palette colors rather than blends.
 
 ### Sequential data
 
@@ -90,8 +96,12 @@ Useful scale arguments: `palette`, `discrete`, `reverse`, `midpoint`, `na.value`
 | `classic` | Diverging, original bright oranges | Matching figures made with version 0.1.0 |
 | `orange` | Sequential, light → dark | One-directional data |
 | `blue` | Sequential, light → dark | One-directional data |
+| `test_chamber` | Categorical, 6 colors | Unordered groups: clean, high-contrast |
+| `overgrown` | Categorical, 6 colors | Unordered groups: earthy greens and rust |
+| `ratman` | Categorical, 6 colors | Unordered groups: warm, gritty |
 
 ## Accessibility
 
-- **Color vision deficiency:** orange vs. blue lies along the blue–yellow axis, which stays distinguishable for the common red–green deficiencies (deuteranopia and protanopia). The closest pair is tan vs. light blue.
-- **Greyscale:** the sequential palettes keep their order in greyscale. The diverging palettes don't: because each orange matches its blue in lightness, greyscale shows *how far* a value is from the midpoint but not *which side* it's on (see the greyscale column above). For printed greyscale figures, use a sequential palette or label the direction explicitly.
+- **Color vision deficiency:** orange vs. blue lies along the blue–yellow axis, which stays distinguishable for the common red–green deficiencies (deuteranopia and protanopia). The closest pair is tan vs. light blue. Every categorical palette was checked so each pair of colors stays distinguishable under deuteranopia, protanopia and tritanopia; `overgrown` has the smallest margin (moss vs. rust), since green against rust is the hardest combination for red–green color blindness.
+- **Pale colors:** `test_chamber`'s panel white and `overgrown`'s sage are light, so they suit bars and fills better than small points on a white background.
+- **Greyscale:** the sequential palettes keep their order in greyscale. The categorical palettes don't survive greyscale; several pairs become the same grey. The diverging palettes don't: because each orange matches its blue in lightness, greyscale shows *how far* a value is from the midpoint but not *which side* it's on (see the greyscale column above). For printed greyscale figures, use a sequential palette or label the direction explicitly.

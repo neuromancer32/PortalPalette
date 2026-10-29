@@ -7,9 +7,14 @@
 portal_palette(palette = "portal", reverse = FALSE, discrete = TRUE, ...)
 }
 \arguments{
-\item{palette}{Character name of the palette: \code{"portal"} (diverging,
-lightness-balanced; the default), \code{"classic"} (diverging, original bright
-oranges), \code{"orange"} or \code{"blue"} (sequential, light to dark).}
+\item{palette}{Character name of the palette:
+\itemize{
+\item Diverging: \code{"portal"} (lightness-balanced; the default) or \code{"classic"}
+(original bright oranges).
+\item Sequential, light to dark: \code{"orange"} or \code{"blue"}.
+\item Categorical, for unordered groups: \code{"test_chamber"}, \code{"overgrown"} or
+\code{"ratman"}.
+}}
 
 \item{reverse}{Logical. If \code{TRUE}, reverses the color order.}
 
@@ -26,12 +31,17 @@ of \code{n} hex colors.
 Returns a function that generates \code{n} colors from a Portal palette.
 }
 \details{
-When \code{discrete = TRUE} and \code{n} is no larger than the number of colors in the
-palette, the function returns exact palette colors spread evenly across the
-palette instead of interpolated blends. For larger \code{n} the colors are
-interpolated with a warning, since neighboring colors become hard to tell
-apart. When \code{discrete = FALSE}, colors are always interpolated with
-\code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}.
+For diverging and sequential palettes, when \code{discrete = TRUE} and \code{n} is no
+larger than the number of colors in the palette, the function returns exact
+palette colors spread evenly across the palette instead of interpolated
+blends. For larger \code{n} the colors are interpolated with a warning, since
+neighboring colors become hard to tell apart. When \code{discrete = FALSE},
+colors are always interpolated with \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}.
+
+Categorical palettes return their first \code{n} colors, which are ordered so
+the first few are the most distinct. They cannot be interpolated, so they
+require \code{discrete = TRUE} and at most as many groups as the palette has
+colors.
 }
 \examples{
 # Six exact colors from the Portal palette
@@ -45,4 +55,7 @@ portal_palette(discrete = FALSE)(100)
 
 # A sequential blue gradient
 portal_palette("blue", discrete = FALSE)(10)
+
+# The first four colors of a categorical palette
+portal_palette("overgrown")(4)
 }
