@@ -10,7 +10,7 @@ Color palettes for R and ggplot2, inspired by the Portal games.
 - **Sequential:** `orange` and `blue` cover data that only goes one way.
 - **Categorical:** `test_chamber`, `overgrown` and `ratman` cover unordered groups such as cell types, conditions or clusters. Their colors were sampled from screenshots of each area, then adjusted so every pair stays distinguishable with common forms of color blindness.
 
-![PortalPalette palettes](man/fig/Palette.png)
+![PortalPalette palettes](man/fig/palettes-overview.png)
 
 ## Installation
 

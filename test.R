@@ -53,7 +53,7 @@ p_palettes <- ggplot(swatches) +
         plot.margin = margin(15, 15, 15, 15),
         plot.background = element_rect(fill = "white", colour = NA)) +
   labs(title = "PortalPalette palettes")
-save_fig(p_palettes, "Palette.png", height = 1000)
+save_fig(p_palettes, "palettes-overview.png", height = 1000)
 
 # 2. Discrete scale --------------------------------------------------------
 p_sepal <- ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
